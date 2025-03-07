@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Comparison</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .text-container {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      justify-content: center;
+    }
+    textarea {
+      width: 50%;
+      height: 80vh;
+      resize: none;
+      padding: 10px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .comparison-result {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .comparison-text {
+      width: 50%;
+      white-space: pre-wrap;
+    }
+    .highlight {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="text-container" id="text-container">
+    <textarea id="textbox1" placeholder="Enter text here..."></textarea>
+    <textarea id="textbox2" placeholder="Enter text here..."></textarea>
+  </div>
+
+  <div class="buttons">
+    <button onclick="compareText()">Compare</button>
+    <button onclick="clearText()">Clear</button>
+  </div>
+
+  <div id="comparison-result" class="comparison-result"></div>
+
+  <script>
+    function compareText() {
+      // Hide the textboxes when comparing
+      document.getElementById("text-container").style.display = "none";
+      
+      let text1 = document.getElementById("textbox1").value.trim();
+      let text2 = document.getElementById("textbox2").value.trim();
+      
+      let result1 = compareStrings(text1, text2);
+      let result2 = compareStrings(text2, text1);
+      
+      let comparisonContainer = document.getElementById("comparison-result");
+      
+      comparisonContainer.innerHTML = `
+        <div class="comparison-text">${result1}</div>
+        <div class="comparison-text">${result2}</div>
+      `;
+    }
+
+    function compareStrings(str1, str2) {
+      let maxLength = Math.max(str1.length, str2.length);
+      let result = '';
+
+      for (let i = 0; i < maxLength; i++) {
+        let char1 = str1[i] || '';
+        let char2 = str2[i] || '';
+        
+        if (char1 !== char2) {
+          result += `<span class="highlight">${char1 || ''}</span>`;
+        } else {
+          result += char1;
+        }
+      }
+      return result;
+    }
+
+    function clearText() {
+      // Unhide the textboxes when clearing
+      document.getElementById("text-container").style.display = "flex";
+      
+      document.getElementById("textbox1").value = '';
+      document.getElementById("textbox2").value = '';
+      document.getElementById("comparison-result").innerHTML = '';
+    }
+  </script>
+</body>
+</html>
